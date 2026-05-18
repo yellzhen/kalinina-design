@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Syne", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+
+  --color-graphite-950: #080809;
+  --color-graphite-900: #0c0c0e;
+  --color-graphite-850: #101012;
+  --color-graphite-800: #141416;
+  --color-graphite-700: #1c1c20;
+  --color-graphite-600: #2a2a30;
+  --color-graphite-500: #3d3d46;
+  --color-cream: #f5f3ef;
+  --color-cream-muted: #a8a6a0;
+  --color-accent: #e8e4dc;
+  --color-accent-warm: #c9b896;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-graphite-950 font-body text-cream antialiased;
+  }
+
+  section[id] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  ::selection {
+    @apply bg-cream/15 text-cream;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .section-padding {
+    @apply px-5 sm:px-8 lg:px-12 xl:px-16;
+  }
+
+  .section-gap {
+    @apply py-12 sm:py-16 lg:py-20;
+  }
+
+  .scrollbar-hide {
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pdf-page-shadow canvas,
+  .pdf-page-shadow .react-pdf__Page {
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+  }
+}
