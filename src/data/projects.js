@@ -79,6 +79,20 @@ const toId = (fileName) =>
 const byFileName = ([a], [b]) =>
   getFileName(a).localeCompare(getFileName(b), "ru", { numeric: true });
 
+const randomRank = (path) => {
+  const value = normalizeName(getFileName(path));
+  let hash = 2166136261;
+
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  return hash >>> 0;
+};
+
+const byRandomRank = ([a], [b]) => randomRank(a) - randomRank(b);
+
 export const selectedWorks = Object.entries(imageModules)
   .sort(byFileName)
   .map(([path, src]) => {
@@ -96,7 +110,7 @@ export const selectedWorks = Object.entries(imageModules)
   });
 
 export const minorWorks = Object.entries(minorImageModules)
-  .sort(byFileName)
+  .sort(byRandomRank)
   .map(([path, src]) => {
     const fileName = getFileName(path);
 
