@@ -1,6 +1,25 @@
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 import { minorWorks } from "../data/projects";
+
+const getColumnCount = () => {
+  if (typeof window === "undefined") return 4;
+  return window.matchMedia("(min-width: 1024px)").matches ? 4 : 2;
+};
+
+const distributeWorks = (works, ratios, columnCount) => {
+  const columns = Array.from({ length: columnCount }, () => []);
+  const heights = Array.from({ length: columnCount }, () => 0);
+
+  works.forEach((work) => {
+    const shortestColumn = heights.indexOf(Math.min(...heights));
+    columns[shortestColumn].push(work);
+    heights[shortestColumn] += ratios[work.id] || 1;
+  });
+
+  return columns;
+};
 
 function MinorWorkImage({ work, index }) {
   return (
@@ -21,10 +40,47 @@ function MinorWorkImage({ work, index }) {
 }
 
 export default function Presentation() {
+  const [columnCount, setColumnCount] = useState(getColumnCount);
+  const [ratios, setRatios] = useState({});
+
+  useEffect(() => {
+    const updateColumnCount = () => setColumnCount(getColumnCount());
+
+    updateColumnCount();
+    window.addEventListener("resize", updateColumnCount);
+    return () => window.removeEventListener("resize", updateColumnCount);
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    minorWorks.forEach((work) => {
+      const image = new Image();
+      image.onload = () => {
+        if (cancelled || !image.naturalWidth) return;
+
+        setRatios((current) => ({
+          ...current,
+          [work.id]: image.naturalHeight / image.naturalWidth,
+        }));
+      };
+      image.src = work.src;
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const columns = useMemo(
+    () => distributeWorks(minorWorks, ratios, columnCount),
+    [columnCount, ratios],
+  );
+
   return (
     <section
       id="presentation"
-      className="section-padding bg-graphite-900/35 pb-10 pt-6 sm:pb-12 sm:pt-8 lg:pb-14 lg:pt-10"
+      className="section-padding relative bg-graphite-900/35 pb-10 pt-6 sm:pb-12 sm:pt-8 lg:pb-14 lg:pt-10"
     >
       <div className="mx-auto max-w-[1600px]">
         <ScrollReveal>
@@ -41,20 +97,22 @@ export default function Presentation() {
           </div>
         </ScrollReveal>
 
-        <div className="grid grid-cols-2 items-start gap-3 sm:gap-5 lg:hidden">
-          {minorWorks.map((work, index) => (
-            <MinorWorkImage key={work.id} work={work} index={index} />
-          ))}
-        </div>
-
-        <div className="hidden gap-5 lg:block lg:columns-4">
-          {minorWorks.map((work, index) => (
-            <div key={work.id} className="mb-5 inline-block w-full break-inside-avoid">
-              <MinorWorkImage work={work} index={index} />
+        <div className="grid grid-cols-2 items-start gap-3 sm:gap-5 lg:grid-cols-4">
+          {columns.map((column, columnIndex) => (
+            <div key={columnIndex} className="flex flex-col gap-3 sm:gap-5">
+              {column.map((work, index) => (
+                <MinorWorkImage
+                  key={work.id}
+                  work={work}
+                  index={index * columnCount + columnIndex}
+                />
+              ))}
             </div>
           ))}
         </div>
       </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-72 bg-gradient-to-b from-transparent via-graphite-950/80 to-graphite-950 sm:h-96 lg:h-[32rem]" />
     </section>
   );
 }
