@@ -16,42 +16,36 @@ const minorImageModules = import.meta.glob(
   },
 );
 
+const publicAsset = (path) => `${import.meta.env.BASE_URL}${path}`;
+
 const selectedMeta = {
-  "Курск_утро": {
-    title: "Мармакс · проект в Курске",
-    category: "Билборды · Стройплощадки",
-  },
   "Манхэттен машино-место в подарок": {
     title: "«Манхэттен» — машино-место в подарок",
     category: "Акция · Наружная реклама",
   },
-  "Мармакс": {
-    title: "ИСГ «Мармакс» — рекламная кампания",
-    category: "Наружная реклама · Digital",
+  "Мармакс 1": {
+    title: "ИСГ «Мармакс» — квартиры с террасами",
+    category: "Key visual · Наружная реклама",
   },
-  "Мармакс-1": {
-    title: "ИСГ «Мармакс» — бренд-коммуникация",
+  "Мармакс 2": {
+    title: "ИСГ «Мармакс» — утро в новом доме",
     category: "Key visual · Digital",
   },
-  "Мармакс_утро": {
-    title: "Мармакс · утренняя коммуникация",
-    category: "Графический дизайн",
-  },
-  "мармакс 1": {
-    title: "Мармакс · серия носителей",
-    category: "Рекламные материалы",
-  },
   "масленица молл": {
-    title: "ТРЦ «Марко молл» — Масленица",
-    category: "Событие · Digital",
+    title: "ТРЦ «Марко молл» — масленичная афиша",
+    category: "Событие · Соцсети",
   },
   "молл 1": {
-    title: "ТРЦ «Марко молл» — промо",
-    category: "Рекламная кампания",
+    title: "ТРЦ «Марко молл» — весенняя коммуникация",
+    category: "Промо · Digital",
   },
   "молл 2": {
-    title: "ТРЦ «Марко молл» — digital-носители",
-    category: "Digital · Соцсети",
+    title: "ТРЦ «Марко молл» — праздничный анонс",
+    category: "Событие · Digital",
+  },
+  "падел клуб длинный макет": {
+    title: "Padel Club — спортивный баннер",
+    category: "Широкий формат · Навигация",
   },
 };
 
@@ -107,42 +101,42 @@ export const minorWorks = Object.entries(minorImageModules)
 export const motionWorks = [
   {
     id: "marco-march",
-    title: "ТРЦ «Марко молл» — март 2026",
-    category: "Анимация для экранов",
+    title: "ТРЦ «Марко молл» — весенняя digital-кампания",
+    category: "Motion · Экраны ТРЦ",
     year: "2026",
     type: "video",
-    src: "/works/marco-mall-march-2026-poster.jpg",
-    poster: "/works/marco-mall-march-2026-poster.jpg",
-    video: "/works/marco-mall-march-2026.mp4",
+    src: publicAsset("works/marco-mall-march-2026-poster.jpg"),
+    poster: publicAsset("works/marco-mall-march-2026-poster.jpg"),
+    video: publicAsset("works/marco-mall-march-2026.mp4"),
   },
   {
     id: "marco-february",
-    title: "ТРЦ «Марко молл» — февраль 2026",
-    category: "Промо · Digital",
+    title: "ТРЦ «Марко молл» — февральский промо-ролик",
+    category: "Motion · Промо",
     year: "2026",
     type: "video",
-    src: "/works/marco-mall-february-2026-poster.jpg",
-    poster: "/works/marco-mall-february-2026-poster.jpg",
-    video: "/works/marco-mall-february-2026.mp4",
+    src: publicAsset("works/marco-mall-february-2026-poster.jpg"),
+    poster: publicAsset("works/marco-mall-february-2026-poster.jpg"),
+    video: publicAsset("works/marco-mall-february-2026.mp4"),
   },
   {
     id: "zarina-collab",
-    title: "Коллаборация «Марко молл» × ZARINA",
-    category: "Рекламная кампания",
+    title: "«Марко молл» × ZARINA — fashion-коллаборация",
+    category: "Motion · Коллаборация",
     year: "2025",
     type: "video",
-    src: "/works/marco-mall-zarina-poster.jpg",
-    poster: "/works/marco-mall-zarina-poster.jpg",
-    video: "/works/marco-mall-zarina.mp4",
+    src: publicAsset("works/marco-mall-zarina-poster.jpg"),
+    poster: publicAsset("works/marco-mall-zarina-poster.jpg"),
+    video: publicAsset("works/marco-mall-zarina.mp4"),
   },
   {
     id: "marmax-motion",
-    title: "ИСГ «Мармакс» — motion для digital",
-    category: "Анимация · Соцсети",
+    title: "ИСГ «Мармакс» — динамичная презентация проекта",
+    category: "Motion · Digital",
     year: "2025",
     type: "video",
-    src: "/works/marmax-motion-poster.jpg",
-    poster: "/works/marmax-motion-poster.jpg",
-    video: "/works/marmax-motion.mp4",
+    src: publicAsset("works/marmax-motion-poster.jpg"),
+    poster: publicAsset("works/marmax-motion-poster.jpg"),
+    video: publicAsset("works/marmax-motion.mp4"),
   },
 ];

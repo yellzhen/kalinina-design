@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 
+const heroImage = `${import.meta.env.BASE_URL}works/marmax-campaign.png`;
+
 export default function Hero() {
   return (
     <section className="section-padding pb-10 sm:pb-12 lg:pb-14">
@@ -21,7 +23,7 @@ export default function Hero() {
           >
             <div className="flex items-center justify-center bg-graphite-800/40 p-4 sm:p-8">
               <motion.img
-                src="/works/marmax-campaign.png"
+                src={heroImage}
                 alt="Рекламная кампания ИСГ Мармакс"
                 className="h-auto w-full max-h-[min(75vh,880px)] object-contain"
                 initial={{ opacity: 0, scale: 0.98 }}

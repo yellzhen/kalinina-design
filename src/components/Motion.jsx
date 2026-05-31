@@ -17,7 +17,7 @@ export default function MotionSection() {
           <SectionHeading
             label="Анимация и digital"
             title="Motion для экранов, соцсетей и рекламы"
-            description="Широкоформатные ролики 1440×720 — целиком, без обрезки. Наведите на карточку, чтобы воспроизвести."
+            description="Динамичные ролики для экранов, промо-кампаний и digital-коммуникаций."
           />
         </div>
 
