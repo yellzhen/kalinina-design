@@ -24,6 +24,7 @@ export default function ProjectCard({
   const mediaClass = fixedHeight
     ? "h-full w-auto max-w-none object-contain"
     : "h-auto w-full object-contain";
+  const altText = title || category || "Проект";
 
   useEffect(() => {
     const el = videoRef.current;
@@ -61,7 +62,7 @@ export default function ProjectCard({
         ) : (
           <motion.img
             src={src}
-            alt={title}
+            alt={altText}
             className={mediaClass}
             loading="lazy"
           />
@@ -74,13 +75,15 @@ export default function ProjectCard({
         <p className="text-[10px] leading-none text-cream-muted/70">
           {category} · {year}
         </p>
-        <h3
-          className={`mt-1 font-display font-medium tracking-tight text-cream/85 ${
-            large ? "text-base sm:text-lg" : "text-sm sm:text-base"
-          }`}
-        >
-          {title}
-        </h3>
+        {title && (
+          <h3
+            className={`mt-1 font-display font-medium tracking-tight text-cream/85 ${
+              large ? "text-base sm:text-lg" : "text-sm sm:text-base"
+            }`}
+          >
+            {title}
+          </h3>
+        )}
       </div>
     </motion.article>
   );

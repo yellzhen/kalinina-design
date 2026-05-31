@@ -18,7 +18,9 @@ const minorImageModules = import.meta.glob(
 
 const publicAsset = (path) => `${import.meta.env.BASE_URL}${path}`;
 
-const selectedMeta = {
+const normalizeName = (name) => name.normalize("NFC");
+
+const selectedMetaEntries = {
   "Манхэттен машино-место в подарок": {
     title: "«Манхэттен» — машино-место в подарок",
     category: "Акция · Наружная реклама",
@@ -43,11 +45,18 @@ const selectedMeta = {
     title: "ТРЦ «Марко молл» — праздничный анонс",
     category: "Событие · Digital",
   },
-  "падел клуб длинный макет": {
-    title: "Padel Club — спортивный баннер",
-    category: "Широкий формат · Навигация",
+  "падел клуб длинный макет": {
+    title: "Padel Club — энергия игры",
+    category: "Широкий формат · Спортивная навигация",
   },
 };
+
+const selectedMeta = Object.fromEntries(
+  Object.entries(selectedMetaEntries).map(([key, value]) => [
+    normalizeName(key),
+    value,
+  ]),
+);
 
 const getFileName = (path) =>
   path
@@ -56,7 +65,7 @@ const getFileName = (path) =>
     .replace(/\.[^.]+$/, "");
 
 const toTitle = (fileName) =>
-  fileName
+  normalizeName(fileName)
     .replace(/[_-]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -73,12 +82,12 @@ const byFileName = ([a], [b]) =>
 export const selectedWorks = Object.entries(imageModules)
   .sort(byFileName)
   .map(([path, src]) => {
-    const fileName = getFileName(path);
+    const fileName = normalizeName(getFileName(path));
     const meta = selectedMeta[fileName] || {};
 
     return {
       id: toId(fileName),
-      title: meta.title || toTitle(fileName),
+      title: meta.title || "",
       category: meta.category || "Графический дизайн",
       year: meta.year || "2025",
       type: "image",
