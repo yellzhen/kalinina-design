@@ -6,7 +6,7 @@ export default defineConfig({
   base: process.env.BASE_PATH || "/",
   plugins: [react(), tailwindcss()],
   server: {
-    host: true,
+    host: "0.0.0.0",
     port: 5173,
   },
 });

@@ -9,6 +9,7 @@ export default function ProjectCard({
   src,
   poster,
   video,
+  mediaMode = "natural",
   className = "",
   large = false,
 }) {
@@ -16,9 +17,13 @@ export default function ProjectCard({
   const videoRef = useRef(null);
   const showVideo = type === "video" && video;
   const videoPoster = poster || src;
-  const mediaFrameClass = showVideo
-    ? "relative flex overflow-hidden"
+  const fixedHeight = mediaMode === "fixed-height";
+  const mediaFrameClass = fixedHeight
+    ? "relative flex h-[58vw] max-h-[560px] min-h-[260px] items-start overflow-hidden sm:h-[50vw] lg:h-[42vw] xl:h-[36vw]"
     : "relative flex overflow-hidden";
+  const mediaClass = fixedHeight
+    ? "h-full w-auto max-w-none object-contain"
+    : "h-auto w-full object-contain";
 
   useEffect(() => {
     const el = videoRef.current;
@@ -45,7 +50,7 @@ export default function ProjectCard({
         {showVideo ? (
           <motion.video
             ref={videoRef}
-            className="h-auto w-full object-contain"
+            className={mediaClass}
             src={video}
             poster={videoPoster}
             muted
@@ -57,7 +62,7 @@ export default function ProjectCard({
           <motion.img
             src={src}
             alt={title}
-            className="h-auto w-full object-contain"
+            className={mediaClass}
             loading="lazy"
           />
         )}

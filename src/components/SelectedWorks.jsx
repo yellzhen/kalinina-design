@@ -128,8 +128,8 @@ export default function SelectedWorks() {
         <div className="mb-8 flex flex-col gap-5 sm:mb-10 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
             label="Графический дизайн"
-            title="Рекламные кампании и носители"
-            description="Наружная реклама, стройплощадки, key visual и адаптации для digital — проекты ИСГ «Мармакс»."
+            title="Рекламные кампании, носители и digital"
+            description="Наружная реклама, события, key visual и адаптации для digital — крупные визуальные задачи в одной прокручиваемой ленте."
           />
         </div>
 
@@ -175,9 +175,9 @@ export default function SelectedWorks() {
                 {loopedWorks.map((project, index) => (
                   <div
                     key={`${project.id}-${index}`}
-                    className="w-[90vw] shrink-0 sm:w-[76vw] lg:w-[62vw] xl:w-[52vw]"
+                    className="shrink-0"
                   >
-                    <ProjectCard {...project} className="h-full" />
+                    <ProjectCard {...project} className="h-full" mediaMode="fixed-height" />
                   </div>
                 ))}
               </div>
