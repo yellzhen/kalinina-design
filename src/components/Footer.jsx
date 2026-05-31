@@ -9,9 +9,6 @@ export default function Footer() {
         <p className="text-sm text-cream-muted">
           © {year} {profile.name} Калинина · {profile.role}
         </p>
-        <p className="text-xs text-cream-muted/70">
-          {profile.location}
-        </p>
       </div>
     </footer>
   );

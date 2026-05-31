@@ -2,8 +2,6 @@ import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 import { minorWorks } from "../data/projects";
 
-const COLUMN_COUNT = 4;
-
 function MinorWorkImage({ work, index }) {
   return (
     <ScrollReveal delay={Math.min(index * 0.015, 0.12)} y={0}>
@@ -23,10 +21,6 @@ function MinorWorkImage({ work, index }) {
 }
 
 export default function Presentation() {
-  const columns = Array.from({ length: COLUMN_COUNT }, (_, columnIndex) =>
-    minorWorks.filter((_, index) => index % COLUMN_COUNT === columnIndex),
-  );
-
   return (
     <section
       id="presentation"
@@ -47,16 +41,16 @@ export default function Presentation() {
           </div>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
-          {columns.map((column, columnIndex) => (
-            <div key={columnIndex} className="flex flex-col gap-4 sm:gap-5">
-              {column.map((work, index) => (
-                <MinorWorkImage
-                  key={work.id}
-                  work={work}
-                  index={index * COLUMN_COUNT + columnIndex}
-                />
-              ))}
+        <div className="grid grid-cols-2 items-start gap-3 sm:gap-5 lg:hidden">
+          {minorWorks.map((work, index) => (
+            <MinorWorkImage key={work.id} work={work} index={index} />
+          ))}
+        </div>
+
+        <div className="hidden gap-5 lg:block lg:columns-4">
+          {minorWorks.map((work, index) => (
+            <div key={work.id} className="mb-5 inline-block w-full break-inside-avoid">
+              <MinorWorkImage work={work} index={index} />
             </div>
           ))}
         </div>
