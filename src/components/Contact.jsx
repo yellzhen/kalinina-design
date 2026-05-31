@@ -16,7 +16,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="section-padding relative z-10 -mt-12 pb-10 pt-0 sm:-mt-16 sm:pb-12 lg:-mt-24 lg:pb-14"
+      className="section-padding relative z-10 -mt-3 pb-10 pt-0 sm:-mt-4 sm:pb-12 lg:-mt-8 lg:pb-14"
     >
       <div className="mx-auto max-w-[1600px]">
         <ScrollReveal>
