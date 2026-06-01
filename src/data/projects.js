@@ -145,16 +145,6 @@ export const motionWorks = [
     video: publicAsset("works/1440х720_Зарина_2.mp4"),
   },
   {
-    id: "marco-march",
-    title: "ТРЦ «Марко молл» — весенняя digital-кампания",
-    category: "Motion · Экраны ТРЦ",
-    year: "2026",
-    type: "video",
-    src: publicAsset("works/marco-mall-march-2026-poster.jpg"),
-    poster: publicAsset("works/marco-mall-march-2026-poster.jpg"),
-    video: publicAsset("works/marco-mall-march-2026.mp4"),
-  },
-  {
     id: "marco-february",
     title: "ТРЦ «Марко молл» — февральский промо-ролик",
     category: "Motion · Промо",
