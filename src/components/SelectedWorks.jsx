@@ -1,8 +1,11 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import SectionHeading from "./SectionHeading";
 import ProjectCard from "./ProjectCard";
 import ScrollReveal from "./ScrollReveal";
 import { selectedWorks } from "../data/projects";
+
+const loopCopies = [0, 1, 2, 3, 4];
+const middleCopyIndex = 2;
 
 export default function SelectedWorks() {
   const viewportRef = useRef(null);
@@ -10,10 +13,41 @@ export default function SelectedWorks() {
   const positionRef = useRef(0);
   const autoPausedUntilRef = useRef(0);
   const manualFrameRef = useRef(null);
-  const loopedWorks = useMemo(
-    () => [...selectedWorks, ...selectedWorks, ...selectedWorks],
-    [],
-  );
+  const dragRef = useRef({
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    lastX: 0,
+    isDragging: false,
+    hasDirection: false,
+  });
+
+  const getSetWidth = () => {
+    const track = trackRef.current;
+    if (!track) return 0;
+
+    const firstSet = track.children[0];
+    const secondSet = track.children[1];
+
+    if (!firstSet || !secondSet) return track.scrollWidth / 3;
+    return secondSet.offsetLeft - firstSet.offsetLeft;
+  };
+
+  const normalizePosition = (position) => {
+    const viewport = viewportRef.current;
+    const setWidth = getSetWidth();
+
+    if (!viewport || setWidth <= viewport.clientWidth) return position;
+    if (position >= setWidth * (middleCopyIndex + 1)) return position - setWidth;
+    if (position < setWidth * middleCopyIndex) return position + setWidth;
+    return position;
+  };
+
+  const applyPosition = (position) => {
+    const track = trackRef.current;
+    if (!track) return;
+    track.style.transform = `translate3d(${-position}px, 0, 0)`;
+  };
 
   useEffect(() => {
     const track = trackRef.current;
@@ -24,24 +58,12 @@ export default function SelectedWorks() {
     let lastTime;
     const speed = 22;
 
-    const getSetWidth = () => track.scrollWidth / 3;
-    const normalizePosition = (position) => {
-      const setWidth = getSetWidth();
-      if (setWidth <= viewport.clientWidth) return position;
-      if (position >= setWidth * 2) return position - setWidth;
-      if (position < setWidth) return position + setWidth;
-      return position;
-    };
-    const applyPosition = (position) => {
-      track.style.transform = `translate3d(${-position}px, 0, 0)`;
-    };
     const ensureMiddleCopy = () => {
       const setWidth = getSetWidth();
       if (setWidth <= viewport.clientWidth) return;
-      if (positionRef.current < setWidth || positionRef.current >= setWidth * 2) {
-        positionRef.current = setWidth;
-        applyPosition(positionRef.current);
-      }
+      if (!positionRef.current) positionRef.current = setWidth * middleCopyIndex;
+      positionRef.current = normalizePosition(positionRef.current);
+      applyPosition(positionRef.current);
     };
 
     ensureMiddleCopy();
@@ -82,19 +104,18 @@ export default function SelectedWorks() {
     const viewport = viewportRef.current;
     if (!track || !viewport) return;
 
-    const setWidth = track.scrollWidth / 3;
+    const firstSet = track.children[0];
+    const secondSet = track.children[1];
+    const setWidth =
+      firstSet && secondSet
+        ? secondSet.offsetLeft - firstSet.offsetLeft
+        : track.scrollWidth / 3;
     if (setWidth <= viewport.clientWidth) return;
 
     if (manualFrameRef.current) cancelAnimationFrame(manualFrameRef.current);
 
     const distance = Math.min(viewport.clientWidth * 0.9, 760);
-    let currentPosition = positionRef.current;
-    if (direction > 0 && currentPosition + distance >= setWidth * 2) {
-      currentPosition -= setWidth;
-    }
-    if (direction < 0 && currentPosition - distance < setWidth) {
-      currentPosition += setWidth;
-    }
+    const currentPosition = positionRef.current || setWidth * middleCopyIndex;
 
     const nextPosition = currentPosition + direction * distance;
     const duration = 650;
@@ -115,11 +136,68 @@ export default function SelectedWorks() {
         return;
       }
 
-      positionRef.current = nextPosition;
+      positionRef.current = normalizePosition(nextPosition);
+      track.style.transform = `translate3d(${-positionRef.current}px, 0, 0)`;
       manualFrameRef.current = null;
     };
 
     manualFrameRef.current = requestAnimationFrame(animate);
+  };
+
+  const handlePointerDown = (event) => {
+    if (!event.isPrimary || event.button !== 0) return;
+
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      lastX: event.clientX,
+      isDragging: false,
+      hasDirection: false,
+    };
+  };
+
+  const handlePointerMove = (event) => {
+    const drag = dragRef.current;
+    if (drag.pointerId !== event.pointerId) return;
+
+    const deltaX = event.clientX - drag.lastX;
+    const totalX = event.clientX - drag.startX;
+    const totalY = event.clientY - drag.startY;
+
+    if (!drag.hasDirection) {
+      if (Math.abs(totalX) < 8 && Math.abs(totalY) < 8) return;
+
+      drag.hasDirection = true;
+      drag.isDragging = Math.abs(totalX) > Math.abs(totalY);
+
+      if (!drag.isDragging) return;
+
+      event.currentTarget.setPointerCapture(event.pointerId);
+      if (manualFrameRef.current) cancelAnimationFrame(manualFrameRef.current);
+    }
+
+    if (!drag.isDragging) return;
+
+    event.preventDefault();
+    autoPausedUntilRef.current = performance.now() + 1800;
+    positionRef.current = normalizePosition(positionRef.current - deltaX);
+    applyPosition(positionRef.current);
+    drag.lastX = event.clientX;
+  };
+
+  const handlePointerUp = (event) => {
+    const drag = dragRef.current;
+    if (drag.pointerId !== event.pointerId) return;
+
+    if (drag.isDragging) {
+      autoPausedUntilRef.current = performance.now() + 1800;
+      positionRef.current = normalizePosition(positionRef.current);
+      applyPosition(positionRef.current);
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    dragRef.current.pointerId = null;
   };
 
   return (
@@ -169,15 +247,27 @@ export default function SelectedWorks() {
           <ScrollReveal delay={0.1} y={24}>
             <div
               ref={viewportRef}
-              className="-mx-5 overflow-hidden px-5 pb-3 sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12 xl:-mx-16 xl:px-16"
+              className="-mx-5 touch-pan-y overflow-hidden px-5 pb-3 sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12 xl:-mx-16 xl:px-16"
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
             >
-              <div ref={trackRef} className="flex gap-5 will-change-transform lg:gap-7">
-                {loopedWorks.map((project, index) => (
+              <div ref={trackRef} className="flex will-change-transform">
+                {loopCopies.map((copyIndex) => (
                   <div
-                    key={`${project.id}-${index}`}
-                    className="shrink-0"
+                    key={copyIndex}
+                    className="flex shrink-0 gap-5 pr-5 lg:gap-7 lg:pr-7"
                   >
-                    <ProjectCard {...project} className="h-full" mediaMode="fixed-height" />
+                    {selectedWorks.map((project) => (
+                      <div key={`${project.id}-${copyIndex}`} className="shrink-0">
+                        <ProjectCard
+                          {...project}
+                          className="h-full"
+                          mediaMode="fixed-height"
+                        />
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>

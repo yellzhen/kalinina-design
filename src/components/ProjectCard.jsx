@@ -8,6 +8,8 @@ export default function ProjectCard({
   type = "image",
   src,
   blurSrc,
+  width,
+  height,
   poster,
   video,
   mediaMode = "natural",
@@ -19,11 +21,12 @@ export default function ProjectCard({
   const showVideo = type === "video" && video;
   const videoPoster = poster || src;
   const fixedHeight = mediaMode === "fixed-height";
+  const aspectRatio = width && height ? `${width} / ${height}` : undefined;
   const mediaFrameClass = fixedHeight
     ? "relative flex h-[58vw] max-h-[560px] min-h-[260px] items-start overflow-hidden sm:h-[50vw] lg:h-[42vw] xl:h-[36vw]"
     : "relative flex overflow-hidden";
   const mediaClass = fixedHeight
-    ? "h-full w-auto max-w-none object-contain"
+    ? "h-full w-full max-w-none object-contain"
     : "h-auto w-full object-contain";
   const altText = title || category || "Проект";
 
@@ -51,6 +54,7 @@ export default function ProjectCard({
       <div
         className={`${mediaFrameClass} bg-graphite-800 bg-cover bg-center`}
         style={{
+          aspectRatio,
           backgroundImage: blurSrc ? `url(${blurSrc})` : undefined,
         }}
       >
@@ -69,6 +73,8 @@ export default function ProjectCard({
           <motion.img
             src={src}
             alt={altText}
+            width={width}
+            height={height}
             className={mediaClass}
             loading="lazy"
             decoding="async"
