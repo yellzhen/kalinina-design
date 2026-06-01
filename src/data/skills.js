@@ -15,7 +15,6 @@ export const skillGroups = [
       "Digital-design",
       "Визуалы для соцсетей",
       "Презентации",
-      "Email-рассылки",
       "Брендинг",
     ],
   },

@@ -128,8 +128,8 @@ export default function SelectedWorks() {
         <div className="mb-8 flex flex-col gap-5 sm:mb-10 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
             label="Графический дизайн"
-            title="Рекламные кампании, носители и digital"
-            description="Наружная реклама, события, key visual и адаптации для digital — крупные визуальные задачи в одной прокручиваемой ленте."
+            title="Рекламные кампании и креативные дизайн-решения"
+            description="Разработка дизайн-систем и визуальных решений для рекламных кампаний, цифровых и офлайн-коммуникаций"
           />
         </div>
 
