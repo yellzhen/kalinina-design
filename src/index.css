@@ -56,8 +56,4 @@
     display: none;
   }
 
-  .pdf-page-shadow canvas,
-  .pdf-page-shadow .react-pdf__Page {
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
-  }
 }

@@ -1,20 +1,4 @@
-const imageModules = import.meta.glob(
-  "../assets/selected-works/*.{jpg,jpeg,png,webp,avif}",
-  {
-    eager: true,
-    query: "?url",
-    import: "default",
-  },
-);
-
-const minorImageModules = import.meta.glob(
-  "../assets/minor-works/*.{jpg,jpeg,png,webp,avif}",
-  {
-    eager: true,
-    query: "?url",
-    import: "default",
-  },
-);
+import { optimizedImages } from "../generated/image-manifest";
 
 const publicAsset = (path) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -48,6 +32,10 @@ const selectedMetaEntries = {
   "падел клуб длинный макет": {
     title: "Padel Club — энергия игры",
     category: "Широкий формат · Спортивная навигация",
+  },
+  "marmax-campaign": {
+    title: "ИСГ «Мармакс» — визуальная кампания",
+    category: "Key visual · Бренд-коммуникация",
   },
 };
 
@@ -93,9 +81,17 @@ const randomRank = (path) => {
 
 const byRandomRank = ([a], [b]) => randomRank(a) - randomRank(b);
 
-export const selectedWorks = Object.entries(imageModules)
+const imageEntries = Object.entries(optimizedImages);
+const selectedImageEntries = imageEntries.filter(([path]) =>
+  path.startsWith("../assets/selected-works/"),
+);
+const minorImageEntries = imageEntries.filter(([path]) =>
+  path.startsWith("../assets/minor-works/"),
+);
+
+export const selectedWorks = selectedImageEntries
   .sort(byFileName)
-  .map(([path, src]) => {
+  .map(([path, image]) => {
     const fileName = normalizeName(getFileName(path));
     const meta = selectedMeta[fileName] || {};
 
@@ -105,19 +101,25 @@ export const selectedWorks = Object.entries(imageModules)
       category: meta.category || "Графический дизайн",
       year: meta.year || "2025",
       type: "image",
-      src,
+      src: image.src,
+      blurSrc: image.blur,
+      width: image.width,
+      height: image.height,
     };
   });
 
-export const minorWorks = Object.entries(minorImageModules)
+export const minorWorks = minorImageEntries
   .sort(byRandomRank)
-  .map(([path, src]) => {
+  .map(([path, image]) => {
     const fileName = getFileName(path);
 
     return {
       id: toId(fileName),
       title: toTitle(fileName),
-      src,
+      src: image.src,
+      blurSrc: image.blur,
+      width: image.width,
+      height: image.height,
     };
   });
 

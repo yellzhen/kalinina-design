@@ -15,14 +15,14 @@ const getCollapsedHeight = () => {
   return 760;
 };
 
-const distributeWorks = (works, ratios, columnCount) => {
+const distributeWorks = (works, columnCount) => {
   const columns = Array.from({ length: columnCount }, () => []);
   const heights = Array.from({ length: columnCount }, () => 0);
 
   works.forEach((work) => {
     const shortestColumn = heights.indexOf(Math.min(...heights));
     columns[shortestColumn].push(work);
-    heights[shortestColumn] += ratios[work.id] || 1;
+    heights[shortestColumn] += work.width ? work.height / work.width : 1;
   });
 
   return columns;
@@ -31,19 +31,27 @@ const distributeWorks = (works, ratios, columnCount) => {
 function MinorWorkImage({ work, index }) {
   return (
     <ScrollReveal delay={Math.min(index * 0.015, 0.12)} y={0}>
-      <motion.img
-        src={work.src}
-        alt={work.title}
-        className="block h-auto w-full rounded-sm"
-        loading="eager"
-        decoding="async"
-        fetchPriority={index < 8 ? "high" : "low"}
-        whileHover={{
-          y: -5,
-          scale: 1.012,
+      <div
+        className="relative w-full overflow-hidden rounded-sm bg-graphite-800 bg-cover bg-center"
+        style={{
+          aspectRatio: `${work.width || 1} / ${work.height || 1}`,
+          backgroundImage: work.blurSrc ? `url(${work.blurSrc})` : undefined,
         }}
-        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-      />
+      >
+        <motion.img
+          src={work.src}
+          alt={work.title}
+          className="absolute inset-0 block h-full w-full object-cover"
+          loading="eager"
+          decoding="async"
+          fetchPriority={index < 8 ? "high" : "low"}
+          whileHover={{
+            y: -5,
+            scale: 1.012,
+          }}
+          transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </div>
     </ScrollReveal>
   );
 }
@@ -53,7 +61,6 @@ export default function Presentation() {
   const [columnCount, setColumnCount] = useState(getColumnCount);
   const [collapsedHeight, setCollapsedHeight] = useState(getCollapsedHeight);
   const [galleryHeight, setGalleryHeight] = useState(getCollapsedHeight);
-  const [ratios, setRatios] = useState({});
   const [isExpanded, setIsExpanded] = useState(false);
   const canToggle = minorWorks.length > 8;
 
@@ -68,54 +75,9 @@ export default function Presentation() {
     return () => window.removeEventListener("resize", updateLayout);
   }, []);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    const loadRatios = async () => {
-      const entries = await Promise.all(
-        minorWorks.map(
-          (work) =>
-            new Promise((resolve) => {
-              const image = new Image();
-
-              image.onload = async () => {
-                if (image.decode) {
-                  try {
-                    await image.decode();
-                  } catch {
-                    // The ratio is still available even if async decoding is skipped.
-                  }
-                }
-
-                resolve([
-                  work.id,
-                  image.naturalWidth
-                    ? image.naturalHeight / image.naturalWidth
-                    : 1,
-                ]);
-              };
-
-              image.onerror = () => resolve([work.id, 1]);
-              image.src = work.src;
-            }),
-        ),
-      );
-
-      if (!cancelled) {
-        setRatios(Object.fromEntries(entries));
-      }
-    };
-
-    loadRatios();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   const columns = useMemo(
-    () => distributeWorks(minorWorks, ratios, columnCount),
-    [columnCount, ratios],
+    () => distributeWorks(minorWorks, columnCount),
+    [columnCount],
   );
 
   useEffect(() => {

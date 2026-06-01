@@ -7,6 +7,7 @@ export default function ProjectCard({
   year,
   type = "image",
   src,
+  blurSrc,
   poster,
   video,
   mediaMode = "natural",
@@ -47,7 +48,12 @@ export default function ProjectCard({
       }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className={mediaFrameClass}>
+      <div
+        className={`${mediaFrameClass} bg-graphite-800 bg-cover bg-center`}
+        style={{
+          backgroundImage: blurSrc ? `url(${blurSrc})` : undefined,
+        }}
+      >
         {showVideo ? (
           <motion.video
             ref={videoRef}
@@ -65,6 +71,7 @@ export default function ProjectCard({
             alt={altText}
             className={mediaClass}
             loading="lazy"
+            decoding="async"
           />
         )}
       </div>
