@@ -3,11 +3,6 @@ import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 import { minorWorks } from "../data/projects";
 
-const getColumnCount = () => {
-  if (typeof window === "undefined") return 4;
-  return window.matchMedia("(min-width: 1024px)").matches ? 4 : 2;
-};
-
 const getCollapsedHeight = () => {
   if (typeof window === "undefined") return 940;
   if (window.matchMedia("(min-width: 1024px)").matches) return 940;
@@ -15,26 +10,113 @@ const getCollapsedHeight = () => {
   return 760;
 };
 
-const distributeWorks = (works, columnCount) => {
-  const columns = Array.from({ length: columnCount }, () => []);
-  const heights = Array.from({ length: columnCount }, () => 0);
-
-  works.forEach((work) => {
-    const shortestColumn = heights.indexOf(Math.min(...heights));
-    columns[shortestColumn].push(work);
-    heights[shortestColumn] += work.width ? work.height / work.width : 1;
-  });
-
-  return columns;
+const getColumnCount = () => {
+  if (typeof window === "undefined") return 4;
+  return window.matchMedia("(min-width: 1024px)").matches ? 4 : 2;
 };
 
-function MinorWorkImage({ work, index }) {
+const getGap = () => {
+  if (typeof window === "undefined") return 20;
+  return window.matchMedia("(min-width: 640px)").matches ? 20 : 12;
+};
+
+const getWorkSpan = (work, columnCount) => {
+  if (columnCount < 4) return 1;
+
+  const ratio = work.width && work.height ? work.width / work.height : 1;
+  return ratio >= 1.28 ? 2 : 1;
+};
+
+const buildMasonryLayout = (works, columnCount, containerWidth, gap) => {
+  if (!containerWidth) return { height: 0, items: [] };
+
+  const maxLayoutWidth =
+    columnCount >= 4 ? Math.min(containerWidth, 1380) : containerWidth;
+  const offsetX = Math.max(0, (containerWidth - maxLayoutWidth) / 2);
+  const columnWidth = (maxLayoutWidth - gap * (columnCount - 1)) / columnCount;
+  const heights = Array.from({ length: columnCount }, () => 0);
+  const items = [];
+
+  works.forEach((work, index) => {
+    const span = getWorkSpan(work, columnCount);
+    const ratio = work.width && work.height ? work.width / work.height : 1;
+    const width = columnWidth * span + gap * (span - 1);
+    const height = width / ratio;
+    let targetColumn = 0;
+    let targetY = Infinity;
+
+    for (let column = 0; column <= columnCount - span; column += 1) {
+      const y = Math.max(...heights.slice(column, column + span));
+
+      if (y < targetY) {
+        targetY = y;
+        targetColumn = column;
+      }
+    }
+
+    const neighborHeights = [
+      heights[targetColumn - 1],
+      heights[targetColumn + span],
+    ].filter((value) => Number.isFinite(value));
+    const surroundingHeight = neighborHeights.length
+      ? Math.max(...neighborHeights)
+      : targetY;
+    const verticalRoom = surroundingHeight - targetY - height;
+    const centerOffset =
+      span > 1 && verticalRoom > gap * 2
+        ? Math.min(verticalRoom / 2, columnWidth * 0.22)
+        : 0;
+    const x = offsetX + targetColumn * (columnWidth + gap);
+    const y = targetY + centerOffset;
+    const bottom = y + height + gap;
+
+    for (let column = targetColumn; column < targetColumn + span; column += 1) {
+      heights[column] = bottom;
+    }
+
+    items.push({
+      height,
+      index,
+      work,
+      width,
+      x,
+      y,
+    });
+  });
+
+  return {
+    height: Math.max(0, Math.max(...heights) - gap),
+    items,
+    width: maxLayoutWidth,
+  };
+};
+
+function MinorWorkImage({ item }) {
+  const { height, index, width, work, x, y } = item;
+  const ratio = work.width && work.height ? work.width / work.height : 1;
+
   return (
-    <ScrollReveal delay={Math.min(index * 0.015, 0.12)} y={0}>
+    <motion.div
+      className="absolute"
+      initial={{ opacity: 0, y: 18 }}
+      style={{
+        height,
+        left: x,
+        top: y,
+        width,
+      }}
+      viewport={{ once: true, amount: 0.15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.65,
+        delay: Math.min(index * 0.015, 0.12),
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
       <div
-        className="relative w-full overflow-hidden rounded-sm bg-graphite-800 bg-cover bg-center"
+        className="relative h-full w-full overflow-hidden rounded-sm bg-graphite-800 bg-cover bg-center shadow-[0_18px_70px_rgba(0,0,0,0.18)]"
         style={{
-          aspectRatio: `${work.width || 1} / ${work.height || 1}`,
+          aspectRatio: `${ratio}`,
           backgroundImage: work.blurSrc ? `url(${work.blurSrc})` : undefined,
         }}
       >
@@ -46,19 +128,21 @@ function MinorWorkImage({ work, index }) {
           decoding="async"
           fetchPriority={index < 8 ? "high" : "low"}
           whileHover={{
-            y: -5,
-            scale: 1.012,
+            y: -3,
+            scale: 1.008,
           }}
           transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         />
       </div>
-    </ScrollReveal>
+    </motion.div>
   );
 }
 
 export default function Presentation() {
   const galleryRef = useRef(null);
   const [columnCount, setColumnCount] = useState(getColumnCount);
+  const [galleryWidth, setGalleryWidth] = useState(0);
+  const [gap, setGap] = useState(getGap);
   const [collapsedHeight, setCollapsedHeight] = useState(getCollapsedHeight);
   const [galleryHeight, setGalleryHeight] = useState(getCollapsedHeight);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -67,6 +151,7 @@ export default function Presentation() {
   useEffect(() => {
     const updateLayout = () => {
       setColumnCount(getColumnCount());
+      setGap(getGap());
       setCollapsedHeight(getCollapsedHeight());
     };
 
@@ -75,25 +160,27 @@ export default function Presentation() {
     return () => window.removeEventListener("resize", updateLayout);
   }, []);
 
-  const columns = useMemo(
-    () => distributeWorks(minorWorks, columnCount),
-    [columnCount],
+  useEffect(() => {
+    const gallery = galleryRef.current;
+    if (!gallery) return undefined;
+
+    const updateWidth = () => setGalleryWidth(gallery.clientWidth);
+    const resizeObserver = new ResizeObserver(updateWidth);
+
+    updateWidth();
+    resizeObserver.observe(gallery);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  const layout = useMemo(
+    () => buildMasonryLayout(minorWorks, columnCount, galleryWidth, gap),
+    [columnCount, galleryWidth, gap],
   );
 
   useEffect(() => {
-    if (!galleryRef.current) return undefined;
-
-    const updateGalleryHeight = () => {
-      setGalleryHeight(galleryRef.current.scrollHeight + 180);
-    };
-
-    updateGalleryHeight();
-
-    const resizeObserver = new ResizeObserver(updateGalleryHeight);
-    resizeObserver.observe(galleryRef.current);
-
-    return () => resizeObserver.disconnect();
-  }, [columns]);
+    setGalleryHeight(layout.height + 180);
+  }, [layout.height]);
 
   return (
     <section
@@ -124,18 +211,11 @@ export default function Presentation() {
         >
           <div
             ref={galleryRef}
-            className="grid grid-cols-2 items-start gap-3 sm:gap-5 lg:grid-cols-4"
+            className="relative w-full"
+            style={{ height: layout.height || collapsedHeight }}
           >
-            {columns.map((column, columnIndex) => (
-              <div key={columnIndex} className="flex flex-col gap-3 sm:gap-5">
-                {column.map((work, index) => (
-                  <MinorWorkImage
-                    key={work.id}
-                    work={work}
-                    index={index * columnCount + columnIndex}
-                  />
-                ))}
-              </div>
+            {layout.items.map((item) => (
+              <MinorWorkImage key={item.work.id} item={item} />
             ))}
           </div>
 
