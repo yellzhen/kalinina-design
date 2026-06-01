@@ -125,6 +125,26 @@ export const minorWorks = minorImageEntries
 
 export const motionWorks = [
   {
+    id: "holland-june-outdoor",
+    title: "ЖК «Голландия» — летняя outdoor-кампания",
+    category: "Motion · Наружная реклама",
+    year: "2025",
+    type: "video",
+    src: publicAsset("works/1440х720_Голландия июнь 2025_RusOutDoor-poster.jpg"),
+    poster: publicAsset("works/1440х720_Голландия июнь 2025_RusOutDoor-poster.jpg"),
+    video: publicAsset("works/1440х720_Голландия июнь 2025_RusOutDoor.mp4"),
+  },
+  {
+    id: "zarina-fashion-second",
+    title: "«Марко молл» × ZARINA — fashion-анонс",
+    category: "Motion · Коллаборация",
+    year: "2026",
+    type: "video",
+    src: publicAsset("works/1440х720_Зарина_2-poster.jpg"),
+    poster: publicAsset("works/1440х720_Зарина_2-poster.jpg"),
+    video: publicAsset("works/1440х720_Зарина_2.mp4"),
+  },
+  {
     id: "marco-march",
     title: "ТРЦ «Марко молл» — весенняя digital-кампания",
     category: "Motion · Экраны ТРЦ",
@@ -143,16 +163,6 @@ export const motionWorks = [
     src: publicAsset("works/marco-mall-february-2026-poster.jpg"),
     poster: publicAsset("works/marco-mall-february-2026-poster.jpg"),
     video: publicAsset("works/marco-mall-february-2026.mp4"),
-  },
-  {
-    id: "zarina-collab",
-    title: "«Марко молл» × ZARINA — fashion-коллаборация",
-    category: "Motion · Коллаборация",
-    year: "2025",
-    type: "video",
-    src: publicAsset("works/marco-mall-zarina-poster.jpg"),
-    poster: publicAsset("works/marco-mall-zarina-poster.jpg"),
-    video: publicAsset("works/marco-mall-zarina.mp4"),
   },
   {
     id: "marmax-motion",
