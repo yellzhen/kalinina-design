@@ -1,5 +1,5 @@
 import SectionHeading from "./SectionHeading";
-import ScrollReveal from "./ScrollReveal";
+import { ScrollRevealItem, ScrollRevealStagger } from "./ScrollReveal";
 import { offlineWorks } from "../data/offlineWorks";
 
 const getCardClass = ({ width, height }) => {
@@ -26,11 +26,14 @@ export default function OfflineCreatives() {
           />
         </div>
 
-        <ScrollReveal delay={0.1} y={24}>
-          <div className="flex flex-col gap-8 sm:gap-10 lg:gap-12">
-            {offlineWorks.map((work) => (
+        <ScrollRevealStagger
+          className="flex flex-col gap-8 sm:gap-10 lg:gap-12"
+          stagger={0.14}
+          amount={0.08}
+        >
+          {offlineWorks.map((work) => (
+            <ScrollRevealItem key={work.id} y={56}>
               <article
-                key={work.id}
                 className={`w-full overflow-hidden rounded-sm ${getCardClass(
                   work,
                 )} ${getAlignClass(work)}`}
@@ -67,9 +70,9 @@ export default function OfflineCreatives() {
                   )}
                 </div>
               </article>
-            ))}
-          </div>
-        </ScrollReveal>
+            </ScrollRevealItem>
+          ))}
+        </ScrollRevealStagger>
       </div>
     </section>
   );
