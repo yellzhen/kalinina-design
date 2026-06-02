@@ -3,6 +3,7 @@ import Intro from "./components/Intro";
 import About from "./components/About";
 import Presentation from "./components/Presentation";
 import SelectedWorks from "./components/SelectedWorks";
+import OfflineCreatives from "./components/OfflineCreatives";
 import MotionSection from "./components/Motion";
 import Skills from "./components/Skills";
 import Contact from "./components/Contact";
@@ -17,6 +18,7 @@ export default function App() {
         <About />
         <Skills />
         <SelectedWorks />
+        <OfflineCreatives />
         <MotionSection />
         <Presentation />
         <Contact />

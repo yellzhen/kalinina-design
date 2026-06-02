@@ -122,14 +122,14 @@ export default function SelectedWorks() {
     const startTime = performance.now();
     autoPausedUntilRef.current = startTime + duration + 150;
     positionRef.current = currentPosition;
-    track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
+    applyPosition(currentPosition);
 
     const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
     const animate = (time) => {
       const progress = Math.min((time - startTime) / duration, 1);
       const eased = easeOutCubic(progress);
       positionRef.current = currentPosition + (nextPosition - currentPosition) * eased;
-      track.style.transform = `translate3d(${-positionRef.current}px, 0, 0)`;
+      applyPosition(positionRef.current);
 
       if (progress < 1) {
         manualFrameRef.current = requestAnimationFrame(animate);
@@ -137,7 +137,7 @@ export default function SelectedWorks() {
       }
 
       positionRef.current = normalizePosition(nextPosition);
-      track.style.transform = `translate3d(${-positionRef.current}px, 0, 0)`;
+      applyPosition(positionRef.current);
       manualFrameRef.current = null;
     };
 

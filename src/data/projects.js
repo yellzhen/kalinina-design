@@ -105,24 +105,26 @@ const minorImageEntries = imageEntries.filter(([path]) =>
   path.startsWith("../assets/minor-works/"),
 );
 
+const toImageProject = ([path, image], fallbackCategory = "Графический дизайн") => {
+  const fileName = normalizeName(getFileName(path));
+  const meta = selectedMeta[fileName] || {};
+
+  return {
+    id: toId(fileName),
+    title: meta.title || "",
+    category: meta.category || fallbackCategory,
+    year: meta.year || "2025",
+    type: "image",
+    src: image.src,
+    blurSrc: image.blur,
+    width: image.width,
+    height: image.height,
+  };
+};
+
 export const selectedWorks = selectedImageEntries
   .sort(byFileName)
-  .map(([path, image]) => {
-    const fileName = normalizeName(getFileName(path));
-    const meta = selectedMeta[fileName] || {};
-
-    return {
-      id: toId(fileName),
-      title: meta.title || "",
-      category: meta.category || "Графический дизайн",
-      year: meta.year || "2025",
-      type: "image",
-      src: image.src,
-      blurSrc: image.blur,
-      width: image.width,
-      height: image.height,
-    };
-  });
+  .map((entry) => toImageProject(entry));
 
 export const minorWorks = minorImageEntries
   .sort(byRandomRank)

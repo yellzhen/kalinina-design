@@ -19,6 +19,13 @@ const sourceGroups = [
     maxWidth: 1800,
     quality: 82,
   },
+  {
+    name: "offline-works",
+    sourceDir: path.join(rootDir, "src/assets/offline-works"),
+    sourceKeyPrefix: "../assets/offline-works",
+    maxWidth: 2400,
+    quality: 84,
+  },
 ];
 const outputDir = path.join(rootDir, "src/generated");
 const imageExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);

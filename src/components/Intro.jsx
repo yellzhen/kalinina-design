@@ -65,7 +65,7 @@ export default function Intro() {
             <img
               src={avatar}
               alt="Евгения Калинина"
-              className="h-auto w-full max-w-[360px] rounded-sm object-contain shadow-[0_32px_90px_rgba(0,0,0,0.38)] sm:max-w-[460px] lg:max-w-[620px] xl:max-w-[680px]"
+              className="h-auto w-full max-w-[300px] rounded-sm object-contain shadow-[0_32px_90px_rgba(0,0,0,0.38)] sm:max-w-[350px] lg:max-w-[420px] xl:max-w-[470px]"
             />
           </motion.div>
         </div>
