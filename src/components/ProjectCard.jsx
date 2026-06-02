@@ -15,6 +15,7 @@ export default function ProjectCard({
   mediaMode = "natural",
   className = "",
   large = false,
+  showYear = true,
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const videoRef = useRef(null);
@@ -86,7 +87,7 @@ export default function ProjectCard({
         className={`px-1 pt-2 ${large ? "sm:pt-3" : ""}`}
       >
         <p className="text-[10px] leading-none text-cream-muted/70">
-          {category} · {year}
+          {showYear && year ? `${category} · ${year}` : category}
         </p>
         {title && (
           <h3

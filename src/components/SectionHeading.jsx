@@ -15,7 +15,7 @@ export default function SectionHeading({
   return (
     <ScrollReveal className={`flex max-w-3xl flex-col gap-4 ${alignClass}`}>
       {label && (
-        <span className="font-body text-sm font-medium text-cream-muted">
+        <span className="font-body text-xs font-semibold uppercase tracking-[0.24em] text-accent-warm">
           {label}
         </span>
       )}

@@ -64,7 +64,7 @@ export default function About() {
               <ScrollReveal delay={0.15}>
                 <div className="flex flex-wrap gap-2 pt-2">
                   {clients.map((client, index) => {
-                    const isFeatured = index < 3;
+                    const isFeatured = index < 2;
 
                     return (
                       <span

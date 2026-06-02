@@ -6,37 +6,53 @@ const normalizeName = (name) => name.normalize("NFC");
 
 const selectedMetaEntries = {
   "Манхэттен машино-место в подарок": {
-    title: "«Манхэттен» — машино-место в подарок",
-    category: "Акция · Наружная реклама",
+    title: "Рекламная кампания для акции девелопера",
+    category: "Наружная реклама · Рязань",
   },
   "Мармакс 1": {
-    title: "ИСГ «Мармакс» — квартиры с террасами",
-    category: "Key visual · Наружная реклама",
+    title: "Имиджевая рекламная кампания",
+    category: "Наружная реклама · Рязань",
   },
   "Мармакс 2": {
-    title: "ИСГ «Мармакс» — утро в новом доме",
-    category: "Key visual · Digital",
+    title: "Имиджевая рекламная кампания",
+    category: "Наружная реклама · Курск",
   },
   "масленица молл": {
-    title: "ТРЦ «Марко молл» — масленичная афиша",
-    category: "Событие · Соцсети",
+    title: "Сезонная рекламная кампания для ТРЦ «Марко молл»",
+    category: "Наружная реклама · Digital",
   },
   "молл 1": {
     title: "ТРЦ «Марко молл» — весенняя коммуникация",
     category: "Промо · Digital",
   },
   "молл 2": {
-    title: "ТРЦ «Марко молл» — праздничный анонс",
-    category: "Событие · Digital",
+    title: "Рекламная кампания для ТРЦ «Марко молл»",
+    category: "Наружная реклама · Digital",
   },
   "падел клуб длинный макет": {
-    title: "Padel Club — энергия игры",
-    category: "Широкий формат · Спортивная навигация",
+    title: "Брендирование падел-клуба",
+    category: "Широкий формат · Коллаборация · Курск",
   },
   "marmax-campaign": {
-    title: "ИСГ «Мармакс» — визуальная кампания",
-    category: "Key visual · Бренд-коммуникация",
+    title: "Реклама на экранах биатлоного комплекса",
+    category: "Motion · Коллаборация",
   },
+  "масленица привязка тц": {
+    title: "Серия макетов для offline и digital-носителей",
+    category: "Motion · Бренд-коммуникация",
+  },
+  "весна молл билбдорд": {
+    title: "Рекламная кампания для ТРЦ «Марко молл»",
+    category: "Наружная реклама · Digital",
+  },
+  "забор 3000х28050": {
+    title: "Брендирование строительной площадки",
+    category: "Широкий формата · Стройплощадка · Рязань",
+  },
+  "книжка поляна": {
+    title: "Дизайн арт-объекта",
+    category: "Нестандратный формат · Рязань",
+  }
 };
 
 const selectedMeta = Object.fromEntries(
@@ -126,7 +142,7 @@ export const minorWorks = minorImageEntries
 export const motionWorks = [
   {
     id: "holland-june-outdoor",
-    title: "ЖК «Голландия» — летняя outdoor-кампания",
+    title: "«Голландия» — летняя outdoor-кампания",
     category: "Motion · Наружная реклама",
     year: "2025",
     type: "video",
@@ -136,8 +152,8 @@ export const motionWorks = [
   },
   {
     id: "zarina-fashion-second",
-    title: "«Марко молл» × ZARINA — fashion-анонс",
-    category: "Motion · Коллаборация",
+    title: "«Марко молл» × ZARINA",
+    category: "Motion · Digital · Коллаборация",
     year: "2026",
     type: "video",
     src: publicAsset("works/1440х720_Зарина_2-poster.jpg"),
@@ -146,8 +162,8 @@ export const motionWorks = [
   },
   {
     id: "marco-february",
-    title: "ТРЦ «Марко молл» — февральский промо-ролик",
-    category: "Motion · Промо",
+    title: "«Марко молл» — февральский промо-ролик",
+    category: "Наружная реклама · Digital",
     year: "2026",
     type: "video",
     src: publicAsset("works/marco-mall-february-2026-poster.jpg"),
@@ -156,9 +172,9 @@ export const motionWorks = [
   },
   {
     id: "marmax-motion",
-    title: "ИСГ «Мармакс» — динамичная презентация проекта",
-    category: "Motion · Digital",
-    year: "2025",
+    title: "«Мармакс» — видео для наружной рекламы",
+    category: "Наружная реклама · Digital",
+    year: "2026",
     type: "video",
     src: publicAsset("works/marmax-motion-poster.jpg"),
     poster: publicAsset("works/marmax-motion-poster.jpg"),

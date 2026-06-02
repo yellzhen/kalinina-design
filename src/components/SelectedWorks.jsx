@@ -265,6 +265,7 @@ export default function SelectedWorks() {
                           {...project}
                           className="h-full"
                           mediaMode="fixed-height"
+                          showYear={false}
                         />
                       </div>
                     ))}
