@@ -36,7 +36,7 @@ export default function About() {
                     whileHover={{ y: -2 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <p className="font-display text-6xl font-semibold leading-none text-cream sm:text-7xl lg:text-8xl">
+                    <p className="font-body text-6xl font-semibold leading-none text-cream lining-nums tabular-nums sm:text-7xl lg:text-8xl">
                       {item.value}
                     </p>
                     <p className="mt-3 text-sm text-cream-muted sm:text-base">
