@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 export default function ProjectCard({
   title,
@@ -17,7 +17,6 @@ export default function ProjectCard({
   large = false,
   showYear = true,
 }) {
-  const [isHovered, setIsHovered] = useState(false);
   const videoRef = useRef(null);
   const showVideo = type === "video" && video;
   const videoPoster = poster || src;
@@ -31,21 +30,29 @@ export default function ProjectCard({
     : "h-auto w-full object-contain";
   const altText = title || category || "Проект";
 
-  useEffect(() => {
+  const playVideo = () => {
     const el = videoRef.current;
     if (!el || !showVideo) return;
-    if (isHovered) el.play().catch(() => {});
-    else {
-      el.pause();
-      el.currentTime = 0;
-    }
-  }, [isHovered, showVideo]);
+
+    el.muted = true;
+    el.defaultMuted = true;
+    el.playsInline = true;
+    el.play().catch(() => {});
+  };
+
+  const resetVideo = () => {
+    const el = videoRef.current;
+    if (!el || !showVideo) return;
+
+    el.pause();
+    el.currentTime = 0;
+  };
 
   return (
     <motion.article
       className={`group flex flex-col overflow-hidden rounded-sm ${className}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onPointerEnter={playVideo}
+      onPointerLeave={resetVideo}
       whileHover={{
         y: -6,
         boxShadow: "0 28px 80px rgba(0, 0, 0, 0.34)",
@@ -66,9 +73,10 @@ export default function ProjectCard({
             src={video}
             poster={videoPoster}
             muted
+            defaultMuted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
           />
         ) : (
           <motion.img
