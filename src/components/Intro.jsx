@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { profile } from "../data/profile";
 import avatar from "../../avatar.png";
+import avatarHover from "../../avatar2.png";
 
 export default function Intro() {
   return (
@@ -62,11 +63,22 @@ export default function Intro() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.75, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
-            <img
-              src={avatar}
-              alt="Евгения Калинина"
-              className="h-auto w-full max-w-[300px] rounded-sm object-contain shadow-[0_32px_90px_rgba(0,0,0,0.38)] sm:max-w-[350px] lg:max-w-[420px] xl:max-w-[470px]"
-            />
+            <div className="group relative w-full max-w-[300px] sm:max-w-[350px] lg:max-w-[420px] xl:max-w-[470px]">
+              <img
+                src={avatar}
+                alt="Евгения Калинина"
+                className="h-auto w-full rounded-sm object-contain shadow-[0_32px_90px_rgba(0,0,0,0.38)]"
+              />
+              <img
+                src={avatarHover}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full rounded-sm object-contain opacity-0 transition-opacity duration-300 ease-out will-change-opacity group-hover:opacity-100"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+              />
+            </div>
           </motion.div>
         </div>
       </div>
