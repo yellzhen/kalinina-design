@@ -32,7 +32,7 @@ export default function About() {
                 {highlights.map((item) => (
                   <motion.div
                     key={item.label}
-                    className="sm:pr-7"
+                    className="sm:text-center"
                     whileHover={{ y: -2 }}
                     transition={{ duration: 0.3 }}
                   >
@@ -54,10 +54,11 @@ export default function About() {
                   digital.
                 </p>
                 <p className="text-base leading-relaxed text-cream-muted/90">
-                  В ИСГ «Мармакс» и ТРЦ «Марко молл» разрабатываю дизайн-системы и
-                  креативы для кампаний: билборды, стройплощадки, POSM, веб-макеты и
-                  анимации для экранов. Работаю на стыке графического дизайна, motion и
-                  AI-инструментов — Photoshop, Illustrator, InDesign, After Effects, Figma.
+                  В ИСГ «Мармакс» и ТРЦ «Марко молл» разрабатываю дизайн-системы
+                  и креативы для кампаний. Работаю с брендингом, наружной рекламой,
+                  motion-дизайном и  AI-инструментами. Создаю печатные и диджитал
+                  макеты от концепции до адаптации на десятки носителей. Photoshop,
+                  Illustrator, InDesign, After Effects, Figma.
                 </p>
               </div>
 

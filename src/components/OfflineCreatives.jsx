@@ -20,7 +20,7 @@ export default function OfflineCreatives() {
       <div className="mx-auto max-w-[1600px]">
         <div className="mb-8 flex flex-col gap-5 sm:mb-10 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
-            label="Оффлайн-креативы"
+            label="Офлайн-креативы"
             title="Макеты для пространства, печати и нестандартных носителей"
             description="Подборка решений, которые работают вне экрана: от длинных форматов до объектного дизайна."
           />
@@ -50,7 +50,7 @@ export default function OfflineCreatives() {
                 >
                   <img
                     src={work.src}
-                    alt={work.title || work.category || "Оффлайн-креатив"}
+                    alt={work.title || work.category || "Офлайн-креатив"}
                     width={work.width}
                     height={work.height}
                     className="h-auto w-full object-contain"

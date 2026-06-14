@@ -84,7 +84,7 @@ const byFileName = ([a], [b]) =>
   getFileName(a).localeCompare(getFileName(b), "ru", { numeric: true });
 
 const randomRank = (path) => {
-  const value = normalizeName(getFileName(path));
+  const value = normalizeName(`${getFileName(path)}:minor-works-v2`);
   let hash = 2166136261;
 
   for (let i = 0; i < value.length; i += 1) {
@@ -96,6 +96,33 @@ const randomRank = (path) => {
 };
 
 const byRandomRank = ([a], [b]) => randomRank(a) - randomRank(b);
+
+const minorPriorityIds = [
+  "заглушка молл",
+  "23",
+  "Новогодняя фотовстреча_3х4",
+  "МАШИНОМЕСТО",
+  "2 сюжет",
+  "4 сюжет",
+  "6 Сюжет",
+  "1420х960 Голландия авито",
+  "КЛАДОВКА 1",
+  "КЛАДОВКА 2",
+  "8 марта_3х4",
+  "Домиленд_Новогодняя елка",
+].map(toId);
+
+const minorPriorityRank = new Map(
+  minorPriorityIds.map((id, index) => [id, index]),
+);
+
+const byMinorPriority = ([a], [b]) => {
+  const aRank = minorPriorityRank.get(toId(getFileName(a))) ?? Infinity;
+  const bRank = minorPriorityRank.get(toId(getFileName(b))) ?? Infinity;
+
+  if (aRank !== bRank) return aRank - bRank;
+  return byRandomRank([a], [b]);
+};
 
 const imageEntries = Object.entries(optimizedImages);
 const selectedImageEntries = imageEntries.filter(([path]) =>
@@ -127,7 +154,7 @@ export const selectedWorks = selectedImageEntries
   .map((entry) => toImageProject(entry));
 
 export const minorWorks = minorImageEntries
-  .sort(byRandomRank)
+  .sort(byMinorPriority)
   .map(([path, image]) => {
     const fileName = getFileName(path);
 

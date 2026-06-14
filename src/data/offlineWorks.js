@@ -59,7 +59,7 @@ export const offlineWorks = Object.entries(optimizedImages)
     return {
       id: toId(fileName),
       title: meta.title || "",
-      category: meta.category || "Оффлайн-креатив",
+      category: meta.category || "Офлайн-креатив",
       order: meta.order || 100,
       src: image.src,
       blurSrc: image.blur,
