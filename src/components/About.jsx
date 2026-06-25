@@ -54,18 +54,18 @@ export default function About() {
             }}
           >
             <ScrollReveal delay={0.1}>
-              <div className="grid gap-6 bg-cream/[0.035] p-5 sm:grid-cols-3 sm:p-7 lg:p-8">
+              <div className="grid grid-cols-3 gap-3 bg-cream/[0.035] px-3 py-4 text-center sm:gap-6 sm:p-7 lg:p-8">
                 {highlights.map((item) => (
                   <motion.div
                     key={item.label}
-                    className="sm:text-center"
+                    className="min-w-0"
                     whileHover={{ y: -2 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <p className="font-body text-6xl font-semibold leading-none text-cream lining-nums tabular-nums sm:text-7xl lg:text-8xl">
+                    <p className="font-body text-[2.55rem] font-semibold leading-none text-cream lining-nums tabular-nums min-[390px]:text-5xl sm:text-7xl lg:text-8xl">
                       {item.value}
                     </p>
-                    <p className="mt-3 text-sm text-cream-muted sm:text-base">
+                    <p className="mt-2 text-xs leading-tight text-cream-muted sm:mt-3 sm:text-base">
                       {item.label}
                     </p>
                   </motion.div>
