@@ -1,9 +1,16 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { profile } from "../data/profile";
 import avatar from "../../avatar.png";
 import avatarHover from "../../avatar2.png";
 
 export default function Intro() {
+  const [canHover, setCanHover] = useState(false);
+
+  useEffect(() => {
+    setCanHover(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+  }, []);
+
   return (
     <section className="relative flex flex-col justify-center overflow-hidden pb-10 pt-20 sm:pb-8 sm:pt-24 lg:min-h-[68vh] lg:pb-10">
       <motion.div
@@ -69,16 +76,19 @@ export default function Intro() {
                 src={avatar}
                 alt="Евгения Калинина"
                 className="h-auto w-full rounded-sm object-contain shadow-[0_32px_90px_rgba(0,0,0,0.38)]"
-              />
-              <img
-                src={avatarHover}
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 h-full w-full rounded-sm object-contain opacity-0 transition-opacity duration-300 ease-out will-change-opacity group-hover:opacity-100"
-                loading="eager"
                 decoding="async"
                 fetchPriority="high"
               />
+              {canHover ? (
+                <img
+                  src={avatarHover}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full rounded-sm object-contain opacity-0 transition-opacity duration-300 ease-out will-change-opacity group-hover:opacity-100"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : null}
             </div>
           </motion.div>
         </div>

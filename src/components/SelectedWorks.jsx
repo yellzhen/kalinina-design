@@ -174,10 +174,25 @@ function ImageBlock({ image, className = "", imgClassName = "object-cover" }) {
 
 function VideoBlock({ video, className = "", videoClassName = "object-cover" }) {
   const videoRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window === "undefined" ? true : window.matchMedia("(max-width: 767px)").matches,
+  );
+  const [shouldLoad, setShouldLoad] = useState(() =>
+    typeof window === "undefined" ? false : !window.matchMedia("(max-width: 767px)").matches,
+  );
 
   useEffect(() => {
     const element = videoRef.current;
     if (!element) return;
+
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+    const updateMode = () => {
+      setIsMobile(mobileQuery.matches);
+      if (!mobileQuery.matches) setShouldLoad(true);
+    };
+
+    updateMode();
+    mobileQuery.addEventListener("change", updateMode);
 
     element.muted = true;
     element.defaultMuted = true;
@@ -191,22 +206,27 @@ function VideoBlock({ video, className = "", videoClassName = "object-cover" }) 
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) playVideo();
+        if (!entry.isIntersecting) return;
+        setShouldLoad(true);
+        playVideo();
       },
-      { threshold: 0.2 },
+      { rootMargin: "600px 0px", threshold: 0.01 },
     );
 
     observer.observe(element);
-    playVideo();
+    if (!mobileQuery.matches) playVideo();
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      mobileQuery.removeEventListener("change", updateMode);
+    };
   }, []);
 
   return (
     <div className={`overflow-hidden bg-transparent ${className}`}>
       <video
         ref={videoRef}
-        src={video.src}
+        src={shouldLoad ? video.src : undefined}
         width={video.width}
         height={video.height}
         className={`h-full w-full ${videoClassName}`}
@@ -217,7 +237,7 @@ function VideoBlock({ video, className = "", videoClassName = "object-cover" }) 
         loop
         controls
         playsInline
-        preload="auto"
+        preload={isMobile ? "metadata" : "auto"}
         onLoadedMetadata={(event) => {
           event.currentTarget.muted = true;
           event.currentTarget.play().catch(() => {});
@@ -270,11 +290,14 @@ export default function SelectedWorks() {
               <h2 className="font-display text-3xl font-semibold leading-tight text-cream sm:text-4xl">
                 Сезонная кампания
               </h2>
-              <p className="mt-8 max-w-[1120px] text-lg leading-relaxed text-cream-muted">
+              <p className="mt-3 font-display text-2xl font-semibold text-cream-muted sm:text-3xl lg:hidden">
+                Марко Молл
+              </p>
+              <p className="mt-5 max-w-[1120px] text-lg leading-relaxed text-cream-muted sm:mt-8">
                 {caseText}
               </p>
             </div>
-            <p className="font-display text-2xl font-semibold text-cream-muted sm:text-3xl">
+            <p className="hidden font-display text-2xl font-semibold text-cream-muted sm:text-3xl lg:block">
               Марко Молл
             </p>
           </div>
@@ -319,11 +342,14 @@ export default function SelectedWorks() {
                 <h3 className="font-display text-3xl font-semibold leading-tight text-cream sm:text-4xl">
                   Брендирование теннисных кортов
                 </h3>
-                <p className="mt-8 max-w-[1120px] text-lg leading-relaxed text-cream-muted">
+                <p className="mt-3 font-display text-2xl font-semibold text-cream-muted sm:text-3xl lg:hidden">
+                  Мармакс
+                </p>
+                <p className="mt-5 max-w-[1120px] text-lg leading-relaxed text-cream-muted sm:mt-8">
                   {tennisIntroText}
                 </p>
               </div>
-              <p className="font-display text-2xl font-semibold text-cream-muted sm:text-3xl">
+              <p className="hidden font-display text-2xl font-semibold text-cream-muted sm:text-3xl lg:block">
                 Мармакс
               </p>
             </div>
@@ -401,12 +427,15 @@ export default function SelectedWorks() {
                 <h3 className="font-display text-3xl font-semibold leading-tight text-cream sm:text-4xl">
                   Рекламная кампания
                 </h3>
-                <div className="mt-8 max-w-[1120px] space-y-4 text-lg leading-relaxed text-cream-muted">
+                <p className="mt-3 font-display text-2xl font-semibold text-cream-muted sm:text-3xl lg:hidden">
+                  Мармакс
+                </p>
+                <div className="mt-5 max-w-[1120px] space-y-4 text-lg leading-relaxed text-cream-muted sm:mt-8">
                   <p>{terraceIntroText}</p>
                   <p>{terraceSceneText}</p>
                 </div>
               </div>
-              <p className="font-display text-2xl font-semibold text-cream-muted sm:text-3xl">
+              <p className="hidden font-display text-2xl font-semibold text-cream-muted sm:text-3xl lg:block">
                 Мармакс
               </p>
             </div>
