@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/optimize-images.mjs && vite",
-    "build": "node scripts/optimize-images.mjs && vite build && node scripts/prune-dist.mjs",
+    "build": "node scripts/optimize-images.mjs && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

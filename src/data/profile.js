@@ -13,7 +13,7 @@ export const profile = {
 };
 
 export const highlights = [
-  { value: "3+", label: "Года в дизайне" },
-  { value: "20+", label: "Рекламных кампаний" },
-  { value: "500+", label: "Креативов и макетов" },
+  { value: "3+", label: "года в дизайне" },
+  { value: "20+", label: "крупных рекламных кампаний" },
+  { value: "500+", label: "креативов и макетов" },
 ];

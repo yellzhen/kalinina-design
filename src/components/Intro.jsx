@@ -43,16 +43,17 @@ export default function Intro() {
               transition={{ duration: 0.6, delay: 0.35 }}
             >
               <a
-                href="#works"
+                href={`${import.meta.env.BASE_URL}resume.pdf`}
+                download="Калинина_Евгения_дизайнер_резюме.pdf"
                 className="inline-flex items-center gap-2 rounded-full bg-cream px-6 py-3 text-sm font-medium text-graphite-950 transition-opacity hover:opacity-90"
               >
-                Смотреть работы
+                Скачать резюме
               </a>
               <a
                 href="#contact"
-                className="inline-flex items-center text-sm text-cream-muted underline-offset-4 transition-colors hover:text-cream hover:underline"
+                className="inline-flex items-center gap-2 rounded-full border border-cream/55 bg-transparent px-6 py-3 text-sm font-medium text-cream transition-colors hover:border-cream hover:bg-cream hover:text-graphite-950"
               >
-                Написать мне →
+                Связаться со мной
               </a>
             </motion.div>
           </div>

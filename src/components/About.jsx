@@ -1,7 +1,33 @@
 import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 import { highlights } from "../data/profile";
-import { clients } from "../data/skills";
+
+const aboutSkillColumns = [
+  [
+    "Рекламные кампании",
+    "Наружная реклама",
+    "Полиграфия и POSM",
+    "Адаптация под носители",
+    "Анимации и motion",
+    "Digital и web макеты",
+  ],
+  [
+    "Figma",
+    "Photoshop",
+    "Illustrator",
+    "InDesign",
+    "CorelDraw",
+    "Google Slides",
+  ],
+  [
+    "After Effects",
+    "Premier Pro",
+    "Midjorney",
+    "Gemini",
+    "Kling",
+    "Runway",
+  ],
+];
 
 export default function About() {
   return (
@@ -54,32 +80,26 @@ export default function About() {
                   digital.
                 </p>
                 <p className="text-base leading-relaxed text-cream-muted/90">
-                  В ИСГ «Мармакс» и ТРЦ «Марко молл» разрабатываю дизайн-системы
-                  и креативы для кампаний. Работаю с брендингом, наружной рекламой,
-                  motion-дизайном и  AI-инструментами. Создаю печатные и диджитал
-                  макеты от концепции до адаптации на десятки носителей. Photoshop,
-                  Illustrator, InDesign, After Effects, Figma.
+                  Разрабатываю дизайн-системы и креативы для кампаний. Работаю с
+                  брендингом, наружной рекламой, motion-дизайном и AI-инструментами.
+                  Создаю печатные и диджитал макеты от концепции до адаптации на
+                  десятки носителей.
                 </p>
               </div>
 
               <ScrollReveal delay={0.15}>
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {clients.map((client, index) => {
-                    const isFeatured = index < 2;
-
-                    return (
-                      <span
-                        key={client}
-                        className={`rounded-full px-3.5 py-2 ${
-                          isFeatured
-                            ? "bg-cream text-sm font-medium text-graphite-950"
-                            : "bg-cream/[0.055] text-sm text-cream-muted"
-                        }`}
-                      >
-                        {client}
-                      </span>
-                    );
-                  })}
+                <div
+                  id="skills"
+                  className="flex flex-wrap gap-2 pt-2"
+                >
+                  {aboutSkillColumns.flat().map((skill) => (
+                    <span
+                      key={skill}
+                      className="cursor-default select-none rounded-full border border-cream/60 bg-transparent px-3.5 py-1.5 text-xs font-medium leading-none text-cream transition-colors hover:border-cream hover:bg-cream hover:text-graphite-950 sm:text-sm"
+                    >
+                      {skill}
+                    </span>
+                  ))}
                 </div>
               </ScrollReveal>
             </div>
